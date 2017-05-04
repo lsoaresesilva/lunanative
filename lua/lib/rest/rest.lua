@@ -50,7 +50,7 @@ function Rest:asJson(callback)
 
     self.options.userCallback = callback
     self.options.callback = readHttpResponse
-    self._nativeObject = RestNative:newRestNative("lua")
+    self._nativeObject = RestNative:newRest("lua")
     currentInstance = self
     self._nativeObject:makeRequest(self.options)
 end

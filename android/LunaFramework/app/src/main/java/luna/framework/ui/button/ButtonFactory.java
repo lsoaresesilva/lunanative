@@ -9,9 +9,15 @@ import luna.lunaframework.MainActivity;
 
 public class ButtonFactory {
 
-    public static ButtonBridge newButton(String language, Object properties, MainActivity context){
+    private MainActivity mMainActivity;
+
+    public ButtonFactory(MainActivity activity){
+        this.mMainActivity = activity;
+    }
+
+    public ButtonBridge newButton(String language, Object properties){
         if(language.equals("lua")){
-            return LuaButtonBridge.newButtonBridge(properties, context);
+            return LuaButtonBridge.newButtonBridge(properties, this.mMainActivity);
         }
 
         return null;

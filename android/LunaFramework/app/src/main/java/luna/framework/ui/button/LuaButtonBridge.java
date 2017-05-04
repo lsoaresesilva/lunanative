@@ -1,6 +1,7 @@
 package luna.framework.ui.button;
 
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
@@ -19,7 +20,7 @@ import luna.lunaframework.MainActivity;
 public class LuaButtonBridge extends ButtonBridge{
 
 
-    public static ButtonBridge newButtonBridge(Object properties, MainActivity context) {
+    public static ButtonBridge newButtonBridge(Object properties, MainActivity context){
         if(context != null && properties != null &&
             (properties instanceof LuaTable) && ((LuaTable) properties).length() > 0){
 
@@ -42,7 +43,7 @@ public class LuaButtonBridge extends ButtonBridge{
 
     @NonNull
     @Override
-    public void setTouchCallback(Object callBack) {
+    public void setTouchCallback(Object callBack){
         if(callBack != null && callBack instanceof LuaFunction){
                 LunaFunctionAdapter luaFunctionAdapter = new LuaFunctionAdapter();
                 luaFunctionAdapter.create(callBack);

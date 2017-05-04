@@ -29,10 +29,9 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_main);
         RelativeLayout r = (RelativeLayout)findViewById(R.id.main_layout);
-        LuaTable t = new LuaTable();
-        t.set("text", "olá mundo!");
-        ButtonBridge b = ButtonFactory.newButton("lua", t, this);
-        r.addView(b.getButtonProxy().getAndroidView());
+
+
+        //r.addView(b.getButtonProxy().getAndroidView());
             /*NativeInterface nativeInterface = new NativeInterface(this);
             DBAdapter dbAdapter = new DBAdapter(this);
             GeoLocationNative glNative = new GeoLocationNative(this);
@@ -53,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
             globals = JsePlatform.standardGlobals();
             globals.finder = this;
             LuaValue chunk = null;
-            chunk = globals.loadfile("main.lua");
+
+            ButtonFactory buttonFactory = new ButtonFactory(this);
+            globals.set("ButtonFactory", CoerceJavaToLua.coerce(buttonFactory));
+            chunk = globals.loadfile("init.lua");
 
             chunk.call();
         }catch(Exception e ){
