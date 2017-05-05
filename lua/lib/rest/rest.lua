@@ -31,6 +31,10 @@ function Rest:get(url)
     return self:_prepare("GET", url)
 end
 
+function Rest:delete(url)
+return self:_prepare("DELETE", url)
+end
+
 function Rest:post(url, params)
     return self:_prepare("POST", url, params)
 end

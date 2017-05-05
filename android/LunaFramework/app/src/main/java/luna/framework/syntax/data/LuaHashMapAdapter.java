@@ -1,11 +1,16 @@
 package luna.framework.syntax.data;
 
+import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaNil;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
+import luna.framework.syntax.function.LuaFunctionAdapter;
+import luna.framework.syntax.function.LunaFunctionAdapter;
+
 import static org.luaj.vm2.LuaValue.TBOOLEAN;
+import static org.luaj.vm2.LuaValue.TFUNCTION;
 import static org.luaj.vm2.LuaValue.TINT;
 import static org.luaj.vm2.LuaValue.TNIL;
 import static org.luaj.vm2.LuaValue.TNUMBER;
@@ -70,7 +75,12 @@ public class LuaHashMapAdapter implements LunaHashMapAdapter {
                     value = null;
                 } else if (luaValue.type() == TBOOLEAN) {
                     value = luaValue.toboolean();
-                } else if (luaValue.type() == TNUMBER) {
+                }else if (luaValue.type() == TFUNCTION) {
+                    LunaFunctionAdapter luaFunction = new LuaFunctionAdapter();
+                    luaFunction.create((LuaFunction)luaValue);
+                    value = luaFunction;
+                }
+                else if (luaValue.type() == TNUMBER) {
                     value = luaValue.todouble();
                 } else if (luaValue.type() == TTABLE) {
                     LunaHashMapAdapter luaHash = new LuaHashMapAdapter();
