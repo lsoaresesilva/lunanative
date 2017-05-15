@@ -19,7 +19,7 @@ import java.io.InputStream;
 import luna.framework.ui.button.ButtonBridge;
 import luna.framework.ui.button.ButtonFactory;
 
-public class MainActivity extends AppCompatActivity implements ResourceFinder {
+public class MainActivity extends AppCompatActivity /*implements ResourceFinder*/ {
 
     private Globals globals;
 
@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
             globals.set("GeoLocationNative", CoerceJavaToLua.coerce(glNative));
             globals.set("RestNative", CoerceJavaToLua.coerce(restNative));*/
 
-        this.LuaJInitialization();
+        //this.LuaJInitialization();
 
 
     }
 
-    private void LuaJInitialization(){
+    /*private void LuaJInitialization(){
         try {
             globals = JsePlatform.standardGlobals();
             globals.finder = this;
@@ -74,5 +74,5 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         } catch (java.io.IOException ioe) {
             return null;
         }
-    }
+    }*/
 }

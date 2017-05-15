@@ -54,7 +54,7 @@ function Rest:asJson(callback)
 
     self.options.userCallback = callback
     self.options.callback = readHttpResponse
-    self._nativeObject = RestNative:newRest("lua")
+    self._nativeObject = RestFactory:create("lua")
     currentInstance = self
     self._nativeObject:makeRequest(self.options)
 end
@@ -67,7 +67,7 @@ function readHttpResponse()
 
     local restInstance = currentInstance
     currentInstance = nil -- reset its states
-    local result = restInstance._nativeObject:getResponse()
+    local result = restInstance._nativeObject:response()
     if result ~= nil then
         local response = {}
         response.content = result:getStringResponse()
