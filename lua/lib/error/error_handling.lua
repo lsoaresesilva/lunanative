@@ -30,8 +30,9 @@ function message(code)
     elseif code == 7 then
         return "Missing text property for Button creation."
     elseif code == 8 then
-        return "Image not found."
+        return "Invalid image name or not found on disk."
     elseif code == 9 then
+        return "Failed to make REST request. Is it a valid URL?"
     elseif code == 10 then
     elseif code == 11 then
         return "Missing table for LunaHashMap creation."

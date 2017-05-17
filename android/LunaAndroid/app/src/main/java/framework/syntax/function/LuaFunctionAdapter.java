@@ -10,42 +10,24 @@ import framework.error.LunaError;
 
 public class LuaFunctionAdapter implements LunaFunctionAdapter {
 
-    LuaFunction callback;
+    private LuaFunction callback;
 
     private LuaFunctionAdapter(){
 
     }
 
-    public LuaFunctionAdapter( Object function ){
-        if( function == null &&
-                !(function instanceof LuaFunction)){
-            LunaError.dispatch(12);
+    public LuaFunctionAdapter( LuaFunction function ){
+        if(function == null){
+            throw new IllegalArgumentException("Missing function for LuaFunctionAdapter.");
         }
-        this.callback = (LuaFunction)function;
+
+        this.callback = function;
 
     }
 
-    @Override
-    public Boolean isFunction() {
-        if(callback != null && callback instanceof LuaFunction) {
-            if (callback.checkfunction() != null) {
-                return true;
-            }
-
-            return false;
-        }else{
-        	LunaError.dispatch(12);
-        }
-        
-        return null;
-    }
 
     @Override
     public void execute(){
-        if(callback != null && callback instanceof LuaFunction) {
-            if (isFunction()) {
-                callback.invoke();
-            }
-        }
+        callback.invoke();
     }
 }

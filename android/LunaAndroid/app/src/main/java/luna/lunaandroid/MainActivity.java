@@ -41,21 +41,21 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
     private void userInterfaceTest(){
         ViewGroup group = (RelativeLayout)findViewById(R.id.main_layout);
 
-        ButtonFactory buttonFactory = new ButtonFactory(this);
+        ButtonFactory buttonFactory = new ButtonFactory(this, LunaError.getInstance());
         LuaTable buttonProperties = new LuaTable();
         LuaTable imgProperties = new LuaTable();
-        imgProperties.set("normal", "btn.png");
-        imgProperties.set("pressed", "btn_pressed.png");
+        imgProperties.set("normal", "outro.png");
+        imgProperties.set("pressed", "outrobtn.png");
         buttonProperties.set("img", imgProperties);
         ButtonBridge bridge = buttonFactory.create("lua", buttonProperties);
 
 
         LuaTable textButtonProperties = new LuaTable();
-        textButtonProperties.set("txt", "Olá mundo!");
+        textButtonProperties.set("text", "Olá mundo!");
 
         ButtonBridge otherBridge = buttonFactory.create("lua", textButtonProperties);
 
-        //group.addView(otherBridge.getButtonProxy().getAndroidView());
+        group.addView(otherBridge.getButtonProxy().getAndroidView());
         group.addView(bridge.getButtonProxy().getAndroidView());
     }
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
 
             chunk.call();
 
-            LunaError.dispatch(1);
+            //LunaError.dispatch(1);
         }catch(Exception e ){
             Log.e("error", e.getMessage());
 

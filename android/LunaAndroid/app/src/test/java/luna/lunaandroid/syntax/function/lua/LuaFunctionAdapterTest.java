@@ -8,11 +8,16 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 
+import framework.error.LunaError;
 import framework.syntax.data.LuaHashMapAdapter;
 import framework.syntax.function.LuaFunctionAdapter;
 import framework.syntax.function.LunaFunctionAdapter;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -21,19 +26,21 @@ import static org.mockito.Mockito.spy;
 
 public class LuaFunctionAdapterTest {
 
+
+    @Test(expected = IllegalArgumentException.class)
+    public void failWithInvalidAdaptee(){
+        LuaFunctionAdapter adapter = new LuaFunctionAdapter(null);
+    }
+
     @Test
-    public void testIsFunction(){
-
-        LuaFunction function = new LuaFunction() {
-            @Override
-            public int type() {
-                return super.type();
-            }
+    public void invokeCallback(){
+        LuaFunction callback = new LuaFunction() {
         };
-
-        LunaFunctionAdapter functionAdapter = new LuaFunctionAdapter(function);
-
-        Assert.assertTrue(functionAdapter.isFunction());
+        LuaFunction callBackSpy = spy(callback);
+        doReturn(null).when(callBackSpy).invoke();
+        LuaFunctionAdapter adapter = new LuaFunctionAdapter(callBackSpy);
+        adapter.execute();
+        verify(callBackSpy).invoke();
     }
 
 

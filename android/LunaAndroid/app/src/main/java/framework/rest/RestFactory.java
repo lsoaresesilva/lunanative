@@ -12,11 +12,11 @@ public class RestFactory {
 
         if( language != null ) {
             if (language.equals("lua")) {
-                return new LuaRestBridge();
+                return new LuaRestBridge(LunaError.getInstance());
             }
         }
 
-        LunaError.dispatch(1);
+        LunaError.getInstance().dispatch(1);
 
         return null;
     }

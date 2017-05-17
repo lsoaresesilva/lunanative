@@ -19,23 +19,31 @@ import luna.lunaandroid.MainActivity;
 
 public class LuaButtonBridge extends ButtonBridge{
 
+    private LunaError errorHandling;
 
-    public static ButtonBridge newButtonBridge(Object properties, MainActivity context){
+    private LuaButtonBridge(){
+
+    }
+
+    public LuaButtonBridge(ButtonProxy proxy, LunaError errorHandling){
+        this.errorHandling = errorHandling;
+        this.buttonProxy = proxy;
+    }
+
+    public static ButtonBridge create(Object properties, MainActivity context, LunaError errorHandling){
         if(context != null && properties != null &&
             (properties instanceof LuaTable)){
 
             LuaTable buttonProperties = (LuaTable)properties;
             LunaHashMapAdapter luaPropertiesAdaptee = new LuaHashMapAdapter(buttonProperties);
 
-            if (luaPropertiesAdaptee.size() > 0) {
-                ButtonBridge newButtonBridge = new LuaButtonBridge();
-                newButtonBridge.buttonProxy = ButtonProxy.newButtonProxy(luaPropertiesAdaptee, context);
-
-                return newButtonBridge;
+            ButtonProxy buttonProxy = ButtonProxy.create(luaPropertiesAdaptee, context, errorHandling);
+            if( buttonProxy != null ){
+                return new LuaButtonBridge(buttonProxy, errorHandling);
             }
         }
 
-        LunaError.dispatch(1);
+        errorHandling.dispatch(1);
 
         return null;
     }
@@ -44,12 +52,12 @@ public class LuaButtonBridge extends ButtonBridge{
     @Override
     public void setTouchCallback(Object callBack){
         if(callBack != null && callBack instanceof LuaFunction){
-                LunaFunctionAdapter luaFunctionAdapter = new LuaFunctionAdapter(callBack);
+                LunaFunctionAdapter luaFunctionAdapter = new LuaFunctionAdapter((LuaFunction)callBack);
 
                 this.getButtonProxy().setTouchCallback(luaFunctionAdapter);
 
         }else{
-            LunaError.dispatch(6);
+            this.errorHandling.dispatch(6);
         }
     }
 }

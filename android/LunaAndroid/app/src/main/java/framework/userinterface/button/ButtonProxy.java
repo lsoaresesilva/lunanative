@@ -27,19 +27,19 @@ import luna.lunaandroid.MainActivity;
  */
 public class ButtonProxy extends UserInterfaceComponent {
 
-    private static View createImageButton(LunaHashMapAdapter properties, MainActivity context){
+    private static View createImageButton(LunaHashMapAdapter properties, MainActivity context, LunaError errorHandling){
         if(properties == null && properties.size() == 0 && context == null){
-            LunaError.dispatch(1);
+            errorHandling.dispatch(1);
             return null;
         }
 
         try{
             final LunaHashMapAdapter imgSrc = (LunaHashMapAdapter) properties.get("img");
             final ImageButton buttonCreated = new ImageButton(context);
-            InputStream imgFileNormal = context.getAssets().open("img/"+imgSrc.get("normal"));
+            InputStream imgFileNormal = context.getAssets().open("scripts/img/"+imgSrc.get("normal"));
             InputStream imgFilePressed = null;
             if( imgSrc.containsKey("pressed") ){
-                imgFilePressed = context.getAssets().open("img/"+imgSrc.get("pressed"));
+                imgFilePressed = context.getAssets().open("scripts/img/"+imgSrc.get("pressed"));
             }
             final Bitmap bitmapNormal = BitmapFactory.decodeStream(imgFileNormal);
             final Bitmap bitmapPressed = BitmapFactory.decodeStream(imgFilePressed);
@@ -65,7 +65,7 @@ public class ButtonProxy extends UserInterfaceComponent {
             return buttonCreated;
 
         }catch(IOException e){
-            LunaError.dispatch(8);
+            errorHandling.dispatch(8);
         }
 
         return null;
@@ -80,10 +80,10 @@ public class ButtonProxy extends UserInterfaceComponent {
      * @param properties An instance of LuaTable with
      * @return
      */
-    public static ButtonProxy newButtonProxy(LunaHashMapAdapter properties, MainActivity context){
+    public static ButtonProxy create(LunaHashMapAdapter properties, MainActivity context, LunaError errorHandling){
 
         if( properties == null && properties.size() == 0 && context == null) {
-            LunaError.dispatch(1);
+            errorHandling.dispatch(1);
             return null;
         }
 
@@ -94,20 +94,27 @@ public class ButtonProxy extends UserInterfaceComponent {
 
         if(imgSrc != null && imgSrc.containsKey("normal") ){
 
-            buttonCreated = createImageButton(properties, context);
+            buttonCreated = createImageButton(properties, context, errorHandling);
 
         }
         else{
-            buttonCreated = new Button(context);
             if (text != null) {
+                buttonCreated = new Button(context);
                 ((Button)buttonCreated).setText(text.toString());
             }else{
-                LunaError.dispatch(7);
+                errorHandling.dispatch(7);
             }
         }
 
+        if( buttonCreated != null ){
+            return new ButtonProxy(buttonCreated, context);
+        }else{
+            return null;
+        }
+    }
 
-        return new ButtonProxy(buttonCreated, context);
+    private ButtonProxy(){
+
     }
 
     private ButtonProxy(View _target, MainActivity activity) {
@@ -130,15 +137,12 @@ public class ButtonProxy extends UserInterfaceComponent {
             androidView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if (callBackName.isFunction()) {
-                        callBackName.execute();
-                    }
+                    callBackName.execute();
 
                 }
             });
         }else{
-            LunaError.dispatch(6);
+            LunaError.getInstance().dispatch(6);
         }
     }
 }

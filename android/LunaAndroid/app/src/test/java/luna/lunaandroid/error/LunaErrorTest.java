@@ -37,7 +37,7 @@ public class LunaErrorTest {
 
         //LuaFunctionAdapter lunaFunctionAdapter = new LuaFunctionAdapter(functionMock);
         LunaError.getInstance().define(functionSpy);
-        LunaError.dispatch(1);
+        LunaError.getInstance().dispatch(1);
         Mockito.verify(functionSpy).invoke();
     }
 

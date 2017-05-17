@@ -19,13 +19,18 @@ public class LunaError {
 
     }
 
-    public static void dispatch(int code){
-        LunaError instance = LunaError.getInstance();
+    public void dispatch(int code){
+        /*LunaError instance = LunaError.getInstance();
 
         instance.code = code;
 
         if(instance.callback != null){
             instance.callback.execute();
+        }*/
+        this.code = code;
+
+        if(this.callback != null){
+            this.callback.execute();
         }
     }
 

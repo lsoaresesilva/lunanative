@@ -9,11 +9,14 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.luaj.vm2.LuaTable;
+import org.mockito.Mockito;
 
+import framework.error.LunaError;
 import framework.userinterface.button.ButtonBridge;
 import framework.userinterface.button.ButtonFactory;
 import luna.lunaandroid.MainActivity;
@@ -34,12 +37,40 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 @RunWith(AndroidJUnit4.class)
 public class BtTests {
 
+    private LunaError errorSpy;
+
+    @Before
+    public void before(){
+        errorSpy = Mockito.spy(LunaError.getInstance());
+    }
+
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
 
     @Test
+    public void failWithInvalidImage(){
+        Mockito.doNothing().when(errorSpy).dispatch(8);
+        ButtonFactory buttonFactory = new ButtonFactory(activityTestRule.getActivity(), errorSpy);
+        LuaTable buttonProperties = new LuaTable();
+
+        LuaTable imgProperties = new LuaTable();
+        imgProperties.set("normal", "btn.png");
+        buttonProperties.set("img", imgProperties);
+        ButtonBridge result = buttonFactory.create("lua", buttonProperties);
+        Assert.assertNull(result);
+        Mockito.verify(errorSpy).dispatch(8);
+
+        LuaTable buttonProperties2 = new LuaTable();
+        LuaTable imgProperties2 = new LuaTable();
+        imgProperties2.set("normal", "btn");
+        buttonProperties2.set("img", imgProperties);
+        ButtonBridge result2 = buttonFactory.create("lua", buttonProperties);
+        Assert.assertNull(result2);
+    }
+
+    @Test
     public void makeButton(){
-        ButtonFactory buttonFactory = new ButtonFactory(activityTestRule.getActivity());
+        ButtonFactory buttonFactory = new ButtonFactory(activityTestRule.getActivity(), LunaError.getInstance());
         LuaTable buttonProperties = new LuaTable();
         buttonProperties.set("text", "Ola");
         ButtonBridge bridge = buttonFactory.create("lua", buttonProperties);
@@ -58,7 +89,7 @@ public class BtTests {
 
         LuaTable imgButtonProperties = new LuaTable();
         LuaTable imgProperties = new LuaTable();
-        imgProperties.set("normal", "btn.png");
+        imgProperties.set("normal", "outro.png");
         imgButtonProperties.set("img", imgProperties);
         ButtonBridge imgButtonBridge = buttonFactory.create("lua", imgButtonProperties);
 

@@ -33,6 +33,13 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
 
     private RestResponseWrapper responseWrapper;
     private LunaFunctionAdapter callback;
+    private LunaError errorHandling;
+
+    public RestProxy( LunaError errorHandling ){
+        this.errorHandling = errorHandling;
+    }
+
+    private RestProxy(){}
 
     public RestResponseWrapper getResponse(){
         return this.responseWrapper;
@@ -45,7 +52,7 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
     }
 
     @Override
-    protected RestResponseWrapper doInBackground(LunaHashMapAdapter... properties) {
+    public RestResponseWrapper doInBackground(LunaHashMapAdapter... properties) {
         LunaHashMapAdapter restProperties = properties[0];
         if( restProperties != null && restProperties.size() != 0){
 
@@ -66,13 +73,14 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
                 //ProviderInstaller.installIfNeeded(this);
                 if(!method.equals("GET") && !method.equals("POST") &&
                    !method.equals("DELETE") &&!method.equals("PUT")){
-                    LunaError.dispatch(3);
+                    this.errorHandling.dispatch(3);
+                    return null;
                 }
 
                 try {
                     URL urlRequest = new URL(url);
                     httpConnection = (HttpURLConnection) urlRequest.openConnection();
-                    HttpsURLConnection.setDefaultSSLSocketFactory(new NoSSLv3Factory());
+                    //HttpsURLConnection.setDefaultSSLSocketFactory(new NoSSLv3Factory());
                     httpConnection.setRequestMethod(method);
                     httpConnection.setRequestProperty("User-Agent", "luna");
                     httpConnection.setRequestProperty("Content-Type", "application/json");
@@ -95,10 +103,13 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
                     responseWrapper = new RestResponseWrapper(response, responseCode);
 
                 }catch (MalformedURLException e) {
-                    LunaError.dispatch(4);
+                    this.errorHandling.dispatch(4);
+                    return null;
                 }
                 catch (Exception e) {
-                    responseWrapper = new RestResponseWrapper(e.getMessage(), -1);
+                    //responseWrapper = new RestResponseWrapper(e.getMessage(), -1);
+                    this.errorHandling.dispatch(9);
+                    return null;
                 } finally {
                     if(httpConnection != null) {
                         httpConnection.disconnect();
@@ -107,10 +118,10 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
                     return responseWrapper;
                 }
             }
-        }else {
-
-            LunaError.dispatch(2);
         }
+
+        this.errorHandling.dispatch(2);
+
         return null;
     }
 
@@ -129,7 +140,7 @@ public class RestProxy extends AsyncTask<LunaHashMapAdapter, Integer, RestRespon
             result = sb.toString();
         }
         catch (Exception e) {
-            LunaError.dispatch(5);
+            this.errorHandling.dispatch(5);
             result = null;
         }
         finally {

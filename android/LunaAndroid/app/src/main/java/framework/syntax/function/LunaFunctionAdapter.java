@@ -6,7 +6,5 @@ package framework.syntax.function;
 
 public interface LunaFunctionAdapter {
 
-    //void create(Object function);
     void execute();
-    Boolean isFunction();
 }

@@ -31,102 +31,79 @@ public class LuaHashMapAdapter implements LunaHashMapAdapter {
 
     }
 
-    public LuaHashMapAdapter(Object adaptee){
-        if(adaptee == null || !(adaptee instanceof LuaTable)){
-            LunaError.dispatch(11);
-        }else {
-            this.adaptee = (LuaTable) adaptee;
+    public LuaHashMapAdapter(LuaTable adaptee){
+        if(adaptee == null){
+            throw new IllegalArgumentException("Missing adaptee for LuaHashMapAdapter.");
         }
+
+        this.adaptee = adaptee;
+
     }
 
     @Override
     public Integer size() {
-        if(adaptee != null && (adaptee instanceof LuaTable)) {
-            int count = 0;
-            LuaValue k = LuaValue.NIL;
-            while (true) {
-                Varargs n = adaptee.next(k);
-                if ((k = n.arg1()).isnil())
-                    break;
-                count++;
-            }
-            return count;
-        }else{
-        	LunaError.dispatch(11);
+        int count = 0;
+        LuaValue k = LuaValue.NIL;
+        while (true) {
+            Varargs n = adaptee.next(k);
+            if ((k = n.arg1()).isnil())
+                break;
+            count++;
         }
-
-        return null;
+        return count;
     }
 
     @Override
     public Boolean containsKey(String key) {
-        if(adaptee != null && (adaptee instanceof LuaTable)) {
-            LuaValue value = this.adaptee.get(key);
-            if (value != LuaValue.NIL)
-                return true;
-            else
-                return false;
-        }else{
-        	LunaError.dispatch(11);
-        }
-        
-        return null;
+        LuaValue value = this.adaptee.get(key);
+        if (value != LuaValue.NIL)
+            return true;
+        else
+            return false;
     }
 
     @Override
     public Object get(String key) {
-        if(adaptee != null && (adaptee instanceof LuaTable)) {
-            Object value = null;
-            if (this.adaptee.get(key) != null || !(this.adaptee.get(key) instanceof LuaNil)) {
-                LuaValue luaValue = this.adaptee.get(key);
+        Object value = null;
+        if (this.adaptee.get(key) != null || !(this.adaptee.get(key) instanceof LuaNil)) {
+            LuaValue luaValue = this.adaptee.get(key);
 
-                if (luaValue.type() == TSTRING) {
-                    value = luaValue.toString();
-                } else if (luaValue.type() == TINT) {
-                    value = luaValue.toint();
-                } else if (luaValue.type() == TNIL) {
-                    value = null;
-                } else if (luaValue.type() == TBOOLEAN) {
-                    value = luaValue.toboolean();
-                } else if (luaValue.type() == TFUNCTION) {
-                    LunaFunctionAdapter luaFunction = new LuaFunctionAdapter((LuaFunction) luaValue);
-                    //luaFunction.create((LuaFunction)luaValue);
-                    value = luaFunction;
-                } else if (luaValue.type() == TNUMBER) {
-                    value = luaValue.todouble();
-                } else if (luaValue.type() == TTABLE) {
-                    LunaHashMapAdapter luaHash = new LuaHashMapAdapter(luaValue);
+            if (luaValue.type() == TSTRING) {
+                value = luaValue.toString();
+            } else if (luaValue.type() == TINT) {
+                value = luaValue.toint();
+            } else if (luaValue.type() == TNIL) {
+                value = null;
+            } else if (luaValue.type() == TBOOLEAN) {
+                value = luaValue.toboolean();
+            } else if (luaValue.type() == TFUNCTION) {
+                LunaFunctionAdapter luaFunction = new LuaFunctionAdapter((LuaFunction) luaValue);
+                //luaFunction.create((LuaFunction)luaValue);
+                value = luaFunction;
+            } else if (luaValue.type() == TNUMBER) {
+                value = luaValue.todouble();
+            } else if (luaValue.type() == TTABLE) {
+                LunaHashMapAdapter luaHash = new LuaHashMapAdapter((LuaTable)luaValue);
 
-                    value = luaHash;
-                }
+                value = luaHash;
             }
-            return value;
-        }else{
-        	LunaError.dispatch(11);
         }
-        
-        return null;
+        return value;
     }
 
     @Override
     public String[] keys() {
-        if(adaptee != null && (adaptee instanceof LuaTable)) {
-			String[] keys = new String[this.size()];
-			LuaValue k = LuaValue.NIL;
-			int count = 0;
-			while ( true ) {
-				Varargs n = adaptee.next(k);
-				if ( (k = n.arg1()).isnil() )
-					break;
-				keys[count] = k.toString();
+        String[] keys = new String[this.size()];
+        LuaValue k = LuaValue.NIL;
+        int count = 0;
+        while ( true ) {
+            Varargs n = adaptee.next(k);
+            if ( (k = n.arg1()).isnil() )
+                break;
+            keys[count] = k.toString();
 
-			}
-
-			return keys;
-        }else{
-        	LunaError.dispatch(11);
         }
-        
-        return null;
+
+        return keys;
     }
 }

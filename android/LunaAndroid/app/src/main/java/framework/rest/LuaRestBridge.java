@@ -13,17 +13,25 @@ import framework.syntax.data.LunaHashMapAdapter;
 public class LuaRestBridge implements RestBridge {
 
     private RestProxy restProxy;
+    private LunaError errorHandling;
+
+    private LuaRestBridge(){}
+
+    public LuaRestBridge( LunaError errorHandling){
+        this.errorHandling = errorHandling;
+    }
 
     @Override
     public void makeRequest(Object properties) {
         if( properties != null && (properties instanceof LuaTable)){
 
             LunaHashMapAdapter luaProperties = new LuaHashMapAdapter((LuaTable) properties);
-            this.restProxy = new RestProxy();
+
+            this.restProxy = new RestProxy(this.errorHandling);
             restProxy.execute(luaProperties);
         }
 
-        LunaError.dispatch(2);
+        this.errorHandling.dispatch(2);
     }
 
 

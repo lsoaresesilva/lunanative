@@ -10,6 +10,7 @@ import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
+import framework.error.LunaError;
 import framework.rest.RestProxy;
 import framework.rest.RestResponseWrapper;
 import framework.syntax.data.LuaHashMapAdapter;
@@ -52,7 +53,7 @@ public class ResFactorytInstrumentedTests {
         luaProperties.set("url", "http://jsonplaceholder.typicode.com/posts/1");
 
         final LunaHashMapAdapter lunaProperties = new LuaHashMapAdapter(luaProperties);
-        final RestProxy r = new RestProxy();
+        final RestProxy r = new RestProxy(LunaError.getInstance());
         r.execute(lunaProperties);
 
         AsyncTaskTest.build(r).
@@ -84,7 +85,7 @@ public class ResFactorytInstrumentedTests {
         luaProperties.set("params", params);
 
         final LunaHashMapAdapter lunaProperties = new LuaHashMapAdapter(luaProperties);
-        final RestProxy r = new RestProxy();
+        final RestProxy r = new RestProxy(LunaError.getInstance());
         r.execute(lunaProperties);
 
         AsyncTaskTest.build(r).
@@ -115,7 +116,7 @@ public class ResFactorytInstrumentedTests {
         luaProperties.set("params", params);
 
         final LunaHashMapAdapter lunaProperties = new LuaHashMapAdapter(luaProperties);
-        final RestProxy r = new RestProxy();
+        final RestProxy r = new RestProxy(LunaError.getInstance());
         r.execute(lunaProperties);
 
         AsyncTaskTest.build(r).
@@ -141,7 +142,7 @@ public class ResFactorytInstrumentedTests {
         luaProperties.set("url", "http://jsonplaceholder.typicode.com/posts/1");
 
         final LunaHashMapAdapter lunaProperties = new LuaHashMapAdapter(luaProperties);
-        final RestProxy r = new RestProxy();
+        final RestProxy r = new RestProxy(LunaError.getInstance());
         r.execute(lunaProperties);
 
         AsyncTaskTest.build(r).
