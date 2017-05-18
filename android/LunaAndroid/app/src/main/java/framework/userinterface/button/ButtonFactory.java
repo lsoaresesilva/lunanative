@@ -26,7 +26,7 @@ public class ButtonFactory {
             }
         }
 
-        errorHandling.dispatch(1);
+        errorHandling.dispatch(0);
 
         return null;
     }

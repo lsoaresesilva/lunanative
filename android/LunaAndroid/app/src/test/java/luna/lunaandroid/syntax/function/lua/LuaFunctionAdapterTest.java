@@ -33,7 +33,7 @@ public class LuaFunctionAdapterTest {
     }
 
     @Test
-    public void invokeCallback(){
+    public void executeCallback(){
         LuaFunction callback = new LuaFunction() {
         };
         LuaFunction callBackSpy = spy(callback);

@@ -34,8 +34,10 @@ public class RestTests {
         errorSpy = Mockito.spy(LunaError.getInstance());
     }
 
+
+
     @Test
-    public void createLuaBridgeInstance(){
+    public void makeRest(){
 
         Assert.assertThat(
                 RestFactory.create("lua"),
@@ -43,16 +45,21 @@ public class RestTests {
     }
 
     @Test
-    public void failWithNullProperties(){
+    public void testFailWithInvalidLanguage(){
+        Assert.assertNull(RestFactory.create(""));
+    }
+
+    @Test
+    public void failWithInvalidProperties(){
 
         Mockito.doNothing().when(errorSpy).dispatch(2);
         RestBridge lunaRest = new LuaRestBridge(errorSpy);
         lunaRest.makeRequest(null);
         Mockito.verify(errorSpy).dispatch(2);
-    }
 
-    @Test
-    public void failWithEmptyProperties(){
+        // Restarting errorSpy
+
+        errorSpy = Mockito.spy(LunaError.getInstance());
 
         Mockito.doNothing().when(errorSpy).dispatch(2);
         RestProxy restProxy = new RestProxy(errorSpy);
@@ -120,24 +127,5 @@ public class RestTests {
 
         Mockito.verify(errorSpy).dispatch(9);
     }
-
-
-    /*@Test
-    public void  testInvalidParameter() {
-        Assert.assertNull(RestFactory.newRest(null));
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        //let properties:NSMutableDictionary = NSMutableDictionary()
-
-
-        //properties.setValue("", forKey: "method")
-        //let luaProperties:LunaHashMapAdapter = LuaHashMapAdapter()
-        //luaProperties.create(properties)
-        //let proxy:RestProxy = RestProxy.newRestProxy(nil)
-
-
-        //XCTAssertNil(RestProxy.newRestProxy(luaProperties))
-        //
-    }*/
 
 }

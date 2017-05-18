@@ -34,10 +34,10 @@ public class ButtonTests {
 
     @Test
     public void failWithInvalidLanguage(){
-        Mockito.doNothing().when(errorSpy).dispatch(1);
+        Mockito.doNothing().when(errorSpy).dispatch(0);
         ButtonFactory factory = new ButtonFactory(mock(MainActivity.class), errorSpy);
         Assert.assertNull(factory.create(null, null));
-        Mockito.verify(errorSpy).dispatch(1);
+        Mockito.verify(errorSpy).dispatch(0);
     }
 
 
@@ -45,26 +45,14 @@ public class ButtonTests {
     @Test
     public void failWithInvalidProperties(){
 
-        Mockito.doNothing().when(errorSpy).dispatch(1);
+
         ButtonBridge buttonBridge = LuaButtonBridge.create(null, null, LunaError.getInstance());
         Assert.assertNull(buttonBridge);
 
+        Mockito.doNothing().when(errorSpy).dispatch(1);
         ButtonBridge secondButtonBridge = LuaButtonBridge.create(new LuaTable(), mock(MainActivity.class), errorSpy);
         Assert.assertNull(secondButtonBridge);
         Mockito.verify(errorSpy).dispatch(1);
-    }
-
-    @Test
-    public void failWithNoText(){
-
-        Mockito.doNothing().when(errorSpy).dispatch(7);
-
-        LuaTable properties = new LuaTable();
-        LunaHashMapAdapter adapter = new LuaHashMapAdapter(properties);
-
-        ButtonProxy button = ButtonProxy.create(adapter, mock(MainActivity.class), errorSpy);
-        Assert.assertNull(button);
-        Mockito.verify(errorSpy).dispatch(7);
     }
 
 

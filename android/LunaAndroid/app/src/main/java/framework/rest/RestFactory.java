@@ -16,7 +16,7 @@ public class RestFactory {
             }
         }
 
-        LunaError.getInstance().dispatch(1);
+        LunaError.getInstance().dispatch(0);
 
         return null;
     }

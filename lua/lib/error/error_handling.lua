@@ -15,7 +15,9 @@ errorHandling = LunaError:getInstance()
 errorHandling:define(throw)
 
 function message(code)
-    if code == 1 then
+    if code == 0 then
+        return "Invalid language."
+    elseif code == 1 then
         return "Missing properties for instance creation."
     elseif code == 2 then
         return "Missing properties for REST request."
@@ -28,16 +30,12 @@ function message(code)
     elseif code == 6 then
         return "A callback was not provided."
     elseif code == 7 then
-        return "Missing text property for Button creation."
+        return "Missing text property."
     elseif code == 8 then
         return "Invalid image name or not found on disk."
     elseif code == 9 then
         return "Failed to make REST request. Is it a valid URL?"
     elseif code == 10 then
-    elseif code == 11 then
-        return "Missing table for LunaHashMap creation."
-    elseif code == 12 then
-        return "Missing function for LunaFunction creation."
     end
 
 end

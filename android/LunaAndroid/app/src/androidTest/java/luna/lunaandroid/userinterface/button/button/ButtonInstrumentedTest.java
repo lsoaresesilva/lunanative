@@ -1,12 +1,10 @@
-package luna.lunaandroid.userinterface.button;
+package luna.lunaandroid.userinterface.button.button;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,12 +18,8 @@ import framework.error.LunaError;
 import framework.userinterface.button.ButtonBridge;
 import framework.userinterface.button.ButtonFactory;
 import luna.lunaandroid.MainActivity;
-import luna.lunaandroid.R;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -35,7 +29,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
  */
 
 @RunWith(AndroidJUnit4.class)
-public class BtTests {
+public class ButtonInstrumentedTest {
 
     private LunaError errorSpy;
 
@@ -73,16 +67,19 @@ public class BtTests {
         ButtonFactory buttonFactory = new ButtonFactory(activityTestRule.getActivity(), LunaError.getInstance());
         LuaTable buttonProperties = new LuaTable();
         buttonProperties.set("text", "Ola");
+        buttonProperties.set("size", 30);
         ButtonBridge bridge = buttonFactory.create("lua", buttonProperties);
         Assert.assertThat(
                 bridge,
                 instanceOf(ButtonBridge.class));
 
         Assert.assertThat(
-                bridge.getButtonProxy().getAndroidView(),
+                bridge.getProxy().getAndroidView(),
                 instanceOf(Button.class));
+        Assert.assertEquals(60, ((Button)bridge.getProxy().getAndroidView()).getTextSize(), 0.1);
 
-        Button buttonCreated = (Button)bridge.getButtonProxy().getAndroidView();
+
+        Button buttonCreated = (Button)bridge.getProxy().getAndroidView();
         Assert.assertEquals("Ola", buttonCreated.getText());
 
 
@@ -98,10 +95,10 @@ public class BtTests {
                 instanceOf(ButtonBridge.class));
 
         Assert.assertThat(
-                imgButtonBridge.getButtonProxy().getAndroidView(),
+                imgButtonBridge.getProxy().getAndroidView(),
                 instanceOf(ImageButton.class));
 
-        ImageButton imageButtonCreated = (ImageButton)imgButtonBridge.getButtonProxy().getAndroidView();
+        ImageButton imageButtonCreated = (ImageButton)imgButtonBridge.getProxy().getAndroidView();
         Assert.assertNotNull(((BitmapDrawable)imageButtonCreated.getDrawable()).getBitmap());
 
     }

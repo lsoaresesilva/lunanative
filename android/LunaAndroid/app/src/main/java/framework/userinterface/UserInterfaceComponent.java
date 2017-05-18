@@ -22,4 +22,15 @@ public abstract class UserInterfaceComponent {
     {
         this.androidView = androidView;
     }
+
+
+    protected UserInterfaceComponent(View _target, MainActivity activity) {
+        this.androidView = _target;
+        this._activity = activity;
+
+    }
+
+    protected UserInterfaceComponent(){
+
+    }
 }

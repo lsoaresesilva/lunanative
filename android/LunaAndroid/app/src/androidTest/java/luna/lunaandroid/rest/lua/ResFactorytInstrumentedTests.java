@@ -40,7 +40,7 @@ public class ResFactorytInstrumentedTests {
      * @throws InterruptedException
      */
     @Test
-    public void makeGetRequestWithSuccess() throws InterruptedException {
+    public void makeGETRequest() throws InterruptedException {
 
         LuaTable luaProperties = new LuaTable();
 
@@ -67,7 +67,7 @@ public class ResFactorytInstrumentedTests {
     }
 
     @Test
-    public void makePostRequestWithSuccess() throws InterruptedException {
+    public void makePOSTRequest() throws InterruptedException {
 
         LuaTable luaProperties = new LuaTable();
 
@@ -98,7 +98,7 @@ public class ResFactorytInstrumentedTests {
     }
 
     @Test
-    public void makePUTRequestWithSuccess() throws InterruptedException {
+    public void makePUTRequest() throws InterruptedException {
 
         LuaTable luaProperties = new LuaTable();
 
@@ -129,7 +129,7 @@ public class ResFactorytInstrumentedTests {
     }
 
     @Test
-    public void makeDELETERequestWithSuccess() throws InterruptedException {
+    public void makeDELETERequest() throws InterruptedException {
 
         LuaTable luaProperties = new LuaTable();
 

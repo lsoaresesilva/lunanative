@@ -1,9 +1,11 @@
 package luna.lunaandroid;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.stetho.Stetho;
@@ -21,6 +23,8 @@ import framework.error.LunaError;
 import framework.rest.RestFactory;
 import framework.userinterface.button.ButtonBridge;
 import framework.userinterface.button.ButtonFactory;
+import framework.userinterface.label.LabelBridge;
+import framework.userinterface.label.LabelFactory;
 
 public class MainActivity extends AppCompatActivity implements ResourceFinder {
 
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_main);
 
-        //userInterfaceTest();
+        userInterfaceTest();
 
 
         this.LuaJInitialization();
@@ -40,8 +44,17 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
 
     private void userInterfaceTest(){
         ViewGroup group = (RelativeLayout)findViewById(R.id.main_layout);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        group.addView(layout);
+
 
         ButtonFactory buttonFactory = new ButtonFactory(this, LunaError.getInstance());
+        LabelFactory labelFactory = new LabelFactory(this, LunaError.getInstance());
+
+
+
         LuaTable buttonProperties = new LuaTable();
         LuaTable imgProperties = new LuaTable();
         imgProperties.set("normal", "outro.png");
@@ -49,14 +62,19 @@ public class MainActivity extends AppCompatActivity implements ResourceFinder {
         buttonProperties.set("img", imgProperties);
         ButtonBridge bridge = buttonFactory.create("lua", buttonProperties);
 
-
         LuaTable textButtonProperties = new LuaTable();
         textButtonProperties.set("text", "Olá mundo!");
-
+        textButtonProperties.set("size", 30);
         ButtonBridge otherBridge = buttonFactory.create("lua", textButtonProperties);
 
-        group.addView(otherBridge.getButtonProxy().getAndroidView());
-        group.addView(bridge.getButtonProxy().getAndroidView());
+        LuaTable labelProperties = new LuaTable();
+        labelProperties.set("text", "Olá mundo!");
+        labelProperties.set("size", 20);
+        LabelBridge labelBridge = labelFactory.create("lua", labelProperties);
+
+        layout.addView(otherBridge.getProxy().getAndroidView());
+        layout.addView(bridge.getProxy().getAndroidView());
+        layout.addView(labelBridge.getProxy().getAndroidView());
     }
 
     private void LuaJInitialization(){

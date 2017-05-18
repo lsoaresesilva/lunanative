@@ -2,6 +2,7 @@ package framework.userinterface.button;
 
 import android.support.annotation.NonNull;
 
+import framework.error.LunaError;
 import luna.lunaandroid.MainActivity;
 
 
@@ -11,18 +12,18 @@ import luna.lunaandroid.MainActivity;
 
 public abstract class ButtonBridge {
 
-    protected ButtonProxy buttonProxy;
+    protected ButtonProxy proxy;
 
-    public ButtonProxy getButtonProxy() {
-        return buttonProxy;
+    public ButtonProxy getProxy() {
+        return proxy;
     }
 
-    public void setButtonProxy(ButtonProxy buttonProxy) {
-        this.buttonProxy = buttonProxy;
+    public void setProxy(ButtonProxy proxy) {
+        this.proxy = proxy;
     }
 
     @NonNull
-    public static ButtonBridge newButtonBridge(Object properties, MainActivity context){
+    public static ButtonBridge create(Object properties, MainActivity context, LunaError errorHandling){
         throw new UnsupportedOperationException("You must implement this method.");
     }
 

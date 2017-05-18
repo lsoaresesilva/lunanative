@@ -33,7 +33,7 @@ public class LuaHashMapAdapterTest {
     }
 
     @Test
-    public void testWillReturnSize(){
+    public void returnSize(){
         LuaTable adaptee = new LuaTable();
         LuaHashMapAdapter adapter = new LuaHashMapAdapter(adaptee);
         Assert.assertEquals(new Integer(0), adapter.size());
@@ -42,7 +42,7 @@ public class LuaHashMapAdapterTest {
     }
 
     @Test
-    public void testWillCheckKey(){
+    public void checkKey(){
         LuaTable adaptee = new LuaTable();
         LuaHashMapAdapter adapter = new LuaHashMapAdapter(adaptee);
         Assert.assertFalse(adapter.containsKey("hi"));
@@ -61,7 +61,7 @@ public class LuaHashMapAdapterTest {
     }
 
     @Test
-    public void testWillReturnValue(){
+    public void returnValue(){
         LuaTable adaptee = new LuaTable();
         LuaHashMapAdapter adapter = new LuaHashMapAdapter(adaptee);
         Assert.assertNull(adapter.get("hi"));

@@ -3,8 +3,11 @@ package framework.userinterface.button;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -43,7 +46,16 @@ public class ButtonProxy extends UserInterfaceComponent {
             }
             final Bitmap bitmapNormal = BitmapFactory.decodeStream(imgFileNormal);
             final Bitmap bitmapPressed = BitmapFactory.decodeStream(imgFilePressed);
-            buttonCreated.setImageBitmap(bitmapNormal);
+
+            BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmapNormal);
+            buttonCreated.setBackgroundDrawable(drawable);
+            //ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(bitmapNormal.getWidth(), bitmapNormal.getHeight());
+            //buttonCreated.setLayoutParams(lp);
+            buttonCreated.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+
 
             buttonCreated.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -82,7 +94,7 @@ public class ButtonProxy extends UserInterfaceComponent {
      */
     public static ButtonProxy create(LunaHashMapAdapter properties, MainActivity context, LunaError errorHandling){
 
-        if( properties == null && properties.size() == 0 && context == null) {
+        if( properties == null || properties.size() == 0 || context == null) {
             errorHandling.dispatch(1);
             return null;
         }
@@ -101,6 +113,17 @@ public class ButtonProxy extends UserInterfaceComponent {
             if (text != null) {
                 buttonCreated = new Button(context);
                 ((Button)buttonCreated).setText(text.toString());
+                ((Button)buttonCreated).setLayoutParams(
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                );
+                if(properties.containsKey("size") && (properties.get("size") instanceof Double)){
+
+                    ((Button)buttonCreated).setTextSize(TypedValue.COMPLEX_UNIT_SP, (float)((Double)properties.get("size")).doubleValue());
+                }
+
             }else{
                 errorHandling.dispatch(7);
             }
@@ -114,13 +137,11 @@ public class ButtonProxy extends UserInterfaceComponent {
     }
 
     private ButtonProxy(){
-
+        super();
     }
 
-    private ButtonProxy(View _target, MainActivity activity) {
-        this.androidView = _target;
-        this._activity = activity;
-
+    public ButtonProxy(View _target, MainActivity activity){
+        super(_target,activity);
     }
 
     public void setIdentifier(int id){
